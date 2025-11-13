@@ -1,0 +1,25 @@
+services:
+    tech-aquisitions-customers-rabbitmq-local:
+        image: rabbitmq:4.2.0-management
+        container_name: tech-aquisitions-customers-rabbitmq-local
+        restart: unless-stopped
+        ports:
+            - "5671:5671"
+            - "15671:15671"
+        environment:
+            RABBITMQ_CONFIG_FILE: "/etc/rabbitmq/rabbitmq.conf"
+            RABBITMQ_LOAD_DEFINITIONS: "/etc/rabbitmq/definitions.json"
+        volumes:
+            - "./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf"
+            - "./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json"
+            - "./rabbitmq/ssl:/etc/rabbitmq/ssl"
+            - tech-aquisitions-customers-rabbitmq-volume:/var/lib/rabbitmq
+        networks:
+            - tech-aquisitions-customers-network-local
+
+networks:
+  tech-aquisitions-customers-network-local:
+    driver: bridge
+
+volumes:
+  tech-aquisitions-customers-rabbitmq-volume:

@@ -1,0 +1,28 @@
+﻿using Tech.Aquisitions.Customers.Workers.Consumers.Base.ConsumerHandler;
+
+namespace Tech.Aquisitions.Customers.Workers.Consumers;
+
+public sealed class AquisitionCustomerRequestedConsumer : ConsumerHandlerBase<AquisitionCustomerRequestedEvent>
+{
+    private readonly ILogger<AquisitionCustomerRequestedConsumer> _logger;
+
+    public AquisitionCustomerRequestedConsumer(
+        ILogger<AquisitionCustomerRequestedConsumer> logger, IServiceProvider serviceProvider) : base(serviceProvider)
+    {
+        _logger = logger;
+    }
+
+    protected override string QueueName => "tech.aquitions.customers.requested";
+
+    protected override Task OnEventReceived(AquisitionCustomerRequestedEvent @event, IServiceProvider serviceProvider, CancellationToken cancellationToken = default)
+    {
+        _logger.LogInformation("[{Type}] Event received. Input = {@Input}",
+            nameof(AquisitionCustomerRequestedConsumer),
+            new 
+            {
+                @event.EventId
+            });
+
+        return Task.CompletedTask;
+    }
+}

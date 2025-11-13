@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B459C7BC-346F-4034-8536-29E10CB38644}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{EFAEF662-F508-4109-819F-B61741F1D3C9}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tech.Aquisitions.Customers.Workers", "src\Tech.Aquisitions.Customers.Workers\Tech.Aquisitions.Customers.Workers.csproj", "{2EFE57A9-B438-40AD-A685-217F9BC3AADC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "devops", "devops", "{68600D43-097C-43DD-A2E0-AC88D950FFC7}"
+	ProjectSection(SolutionItems) = preProject
+		devops\docker-compose.local.yaml = devops\docker-compose.local.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "rabbitmq", "rabbitmq", "{E495A36F-B32B-4701-9736-E02B07070E41}"
+	ProjectSection(SolutionItems) = preProject
+		devops\rabbitmq\definitions.json = devops\rabbitmq\definitions.json
+		devops\rabbitmq\rabbitmq.conf = devops\rabbitmq\rabbitmq.conf
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ssl", "ssl", "{6B2F5583-5547-4F04-832E-3E2A6F3C470C}"
+	ProjectSection(SolutionItems) = preProject
+		devops\rabbitmq\ssl\ca_certificate.pem = devops\rabbitmq\ssl\ca_certificate.pem
+		devops\rabbitmq\ssl\ca_key.pem = devops\rabbitmq\ssl\ca_key.pem
+		devops\rabbitmq\ssl\server_certificate.pem = devops\rabbitmq\ssl\server_certificate.pem
+		devops\rabbitmq\ssl\server_csr.pem = devops\rabbitmq\ssl\server_csr.pem
+		devops\rabbitmq\ssl\server_key.pem = devops\rabbitmq\ssl\server_key.pem
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2EFE57A9-B438-40AD-A685-217F9BC3AADC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EFE57A9-B438-40AD-A685-217F9BC3AADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EFE57A9-B438-40AD-A685-217F9BC3AADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EFE57A9-B438-40AD-A685-217F9BC3AADC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2EFE57A9-B438-40AD-A685-217F9BC3AADC} = {B459C7BC-346F-4034-8536-29E10CB38644}
+		{E495A36F-B32B-4701-9736-E02B07070E41} = {68600D43-097C-43DD-A2E0-AC88D950FFC7}
+		{6B2F5583-5547-4F04-832E-3E2A6F3C470C} = {E495A36F-B32B-4701-9736-E02B07070E41}
+	EndGlobalSection
+EndGlobal
