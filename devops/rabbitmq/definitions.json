@@ -46,6 +46,6 @@
       "destination": "tech.aquitions.customers.requested",
       "destination_type": "queue",
       "routing_key": "tech.aquitions.customers.request"
-    }
+    },
   ]
 }

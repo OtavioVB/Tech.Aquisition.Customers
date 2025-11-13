@@ -2,6 +2,7 @@
 using RabbitMQ.Client.Events;
 using System.Text.Json;
 using Tech.Aquisitions.Customers.Workers.Consumers.Base.ConnectionManager.Interfaces;
+using Tech.Aquisitions.Customers.Workers.Consumers.Base.Events;
 
 namespace Tech.Aquisitions.Customers.Workers.Consumers.Base.ConsumerHandler;
 
@@ -36,7 +37,7 @@ public abstract class ConsumerHandlerBase<TEvent> : BackgroundService
 
             var raw = @event.Body.ToArray();
 
-            var input = JsonSerializer.Deserialize<TEvent>(raw, new JsonSerializerOptions()
+            var input = JsonSerializer.Deserialize<IEvent<TEvent>>(raw, new JsonSerializerOptions()
             {
                 PropertyNameCaseInsensitive = true
             })!;
@@ -57,5 +58,5 @@ public abstract class ConsumerHandlerBase<TEvent> : BackgroundService
             });
     }
 
-    protected abstract Task OnEventReceived(TEvent @event, IServiceProvider serviceProvider, CancellationToken cancellationToken = default);
+    protected abstract Task OnEventReceived(IEvent<TEvent> @event, IServiceProvider serviceProvider, CancellationToken cancellationToken = default);
 }

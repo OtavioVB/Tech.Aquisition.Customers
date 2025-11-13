@@ -1,0 +1,34 @@
+﻿using System.Text.Json.Serialization;
+
+namespace Tech.Aquisitions.Customers.Workers.Consumers.Base.Events;
+
+public class EventBase<T> : IEvent<T>
+{
+    public EventBase(T @event)
+    {
+        EventId = Guid.NewGuid();
+        Event = @event;
+        Timestamp = DateTime.UtcNow;
+    }
+
+    public EventBase(Guid eventId, T @event, DateTime timestamp, string? routingKey = null, string? origin = null)
+    {
+        EventId = eventId;
+        Event = @event;
+        Timestamp = timestamp;
+        RoutingKey = routingKey;
+        Origin = origin;
+    }
+
+    public Guid EventId { get; set;  }
+
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Origin { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? RoutingKey { get; set; }
+
+    public T Event { get; set; }
+    public DateTime Timestamp { get; set; }
+}
