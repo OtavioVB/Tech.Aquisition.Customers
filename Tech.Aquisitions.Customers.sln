@@ -32,6 +32,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ssl", "ssl", "{6B2F5583-554
 		devops\rabbitmq\ssl\server_key.pem = devops\rabbitmq\ssl\server_key.pem
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tech.Aquisitions.Customers.WebApi", "src\Tech.Aquisitions.Customers.WebApi\Tech.Aquisitions.Customers.WebApi.csproj", "{A1BEF83F-7CA0-490D-A3F9-0494DF83ECFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tech.Aquisitions.Customers.Domain", "src\Tech.Aquisitions.Customers.Domain\Tech.Aquisitions.Customers.Domain.csproj", "{0B26B24C-3271-4EAE-8111-EAABACA469DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tech.Aquisitions.Customers.Application", "src\Tech.Aquisitions.Customers.Application\Tech.Aquisitions.Customers.Application.csproj", "{9F01EEA5-B54D-4453-AA4C-FE2DB0A139C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tech.Aquisitions.Customers.Infrascructure", "src\Tech.Aquisitions.Customers.Infrascructure\Tech.Aquisitions.Customers.Infrascructure.csproj", "{B4D934B6-C207-4C19-A2E0-98405A2DDA5A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tsts", "tsts", "{8B61A1E0-E466-4919-B151-3AF487E2A790}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +52,22 @@ Global
 		{2EFE57A9-B438-40AD-A685-217F9BC3AADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EFE57A9-B438-40AD-A685-217F9BC3AADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EFE57A9-B438-40AD-A685-217F9BC3AADC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1BEF83F-7CA0-490D-A3F9-0494DF83ECFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1BEF83F-7CA0-490D-A3F9-0494DF83ECFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1BEF83F-7CA0-490D-A3F9-0494DF83ECFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1BEF83F-7CA0-490D-A3F9-0494DF83ECFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B26B24C-3271-4EAE-8111-EAABACA469DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B26B24C-3271-4EAE-8111-EAABACA469DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B26B24C-3271-4EAE-8111-EAABACA469DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B26B24C-3271-4EAE-8111-EAABACA469DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F01EEA5-B54D-4453-AA4C-FE2DB0A139C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F01EEA5-B54D-4453-AA4C-FE2DB0A139C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F01EEA5-B54D-4453-AA4C-FE2DB0A139C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F01EEA5-B54D-4453-AA4C-FE2DB0A139C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4D934B6-C207-4C19-A2E0-98405A2DDA5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4D934B6-C207-4C19-A2E0-98405A2DDA5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4D934B6-C207-4C19-A2E0-98405A2DDA5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4D934B6-C207-4C19-A2E0-98405A2DDA5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,5 +76,9 @@ Global
 		{2EFE57A9-B438-40AD-A685-217F9BC3AADC} = {B459C7BC-346F-4034-8536-29E10CB38644}
 		{E495A36F-B32B-4701-9736-E02B07070E41} = {68600D43-097C-43DD-A2E0-AC88D950FFC7}
 		{6B2F5583-5547-4F04-832E-3E2A6F3C470C} = {E495A36F-B32B-4701-9736-E02B07070E41}
+		{A1BEF83F-7CA0-490D-A3F9-0494DF83ECFD} = {B459C7BC-346F-4034-8536-29E10CB38644}
+		{0B26B24C-3271-4EAE-8111-EAABACA469DE} = {B459C7BC-346F-4034-8536-29E10CB38644}
+		{9F01EEA5-B54D-4453-AA4C-FE2DB0A139C2} = {B459C7BC-346F-4034-8536-29E10CB38644}
+		{B4D934B6-C207-4C19-A2E0-98405A2DDA5A} = {B459C7BC-346F-4034-8536-29E10CB38644}
 	EndGlobalSection
 EndGlobal

@@ -1,4 +1,5 @@
 ﻿using Tech.Aquisitions.Customers.Workers.Consumers.Base.ConsumerHandler;
+using Tech.Aquisitions.Customers.Workers.Consumers.Base.Events;
 
 namespace Tech.Aquisitions.Customers.Workers.Consumers;
 
@@ -14,7 +15,7 @@ public sealed class AquisitionCustomerRequestedConsumer : ConsumerHandlerBase<Aq
 
     protected override string QueueName => "tech.aquitions.customers.requested";
 
-    protected override Task OnEventReceived(AquisitionCustomerRequestedEvent @event, IServiceProvider serviceProvider, CancellationToken cancellationToken = default)
+    protected override Task OnEventReceived(IEvent<AquisitionCustomerRequestedEvent> @event, IServiceProvider serviceProvider, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("[{Type}] Event received. Input = {@Input}",
             nameof(AquisitionCustomerRequestedConsumer),
