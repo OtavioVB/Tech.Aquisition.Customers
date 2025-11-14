@@ -1,6 +1,6 @@
 ﻿using System.Security.Authentication;
 
-namespace Tech.Aquisitions.Customers.Workers.Consumers.Base.Configuration;
+namespace Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.Configuration;
 
 public sealed record RabbitMqConfiguration(
     string HostName,

@@ -1,10 +1,13 @@
-﻿using RabbitMQ.Client;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text.Json;
-using Tech.Aquisitions.Customers.Workers.Consumers.Base.ConnectionManager.Interfaces;
-using Tech.Aquisitions.Customers.Workers.Consumers.Base.Events;
+using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.ConnectionManager.Interfaces;
+using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.Events;
 
-namespace Tech.Aquisitions.Customers.Workers.Consumers.Base.ConsumerHandler;
+namespace Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.ConsumerHandler;
 
 public abstract class ConsumerHandlerBase<TEvent> : BackgroundService
 {
@@ -52,7 +55,7 @@ public abstract class ConsumerHandlerBase<TEvent> : BackgroundService
         _logger.LogInformation(
             message: "[{Type}] The consumer has been started. Input = {@Input}",
             nameof(ConsumerHandlerBase<TEvent>),
-            new 
+            new
             {
                 ConsumerTag = consumerTag
             });

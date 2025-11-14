@@ -1,6 +1,6 @@
 ﻿using RabbitMQ.Client;
 
-namespace Tech.Aquisitions.Customers.Workers.Consumers.Base.ConnectionManager.Interfaces;
+namespace Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.ConnectionManager.Interfaces;
 
 public interface IRabbitMqConnectionManager
 {

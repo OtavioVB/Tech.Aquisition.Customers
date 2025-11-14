@@ -1,8 +1,9 @@
 ﻿
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Tech.Aquisitions.Customers.Workers.Consumers.Base.ConnectionManager.Interfaces;
+using Microsoft.Extensions.Logging;
+using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.ConnectionManager.Interfaces;
 
-namespace Tech.Aquisitions.Customers.Workers.HealthChecks;
+namespace Tech.Aquisitions.Customers.Infrascructure.RabbitMq.HealthChecks;
 
 public sealed class RabbitMqHealthCheck : IHealthCheck
 {

@@ -1,4 +1,4 @@
-﻿namespace Tech.Aquisitions.Customers.Workers.Consumers.Base.Events;
+﻿namespace Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.Events;
 
 public interface IEvent<T>
 {

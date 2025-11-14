@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.HealthChecks;
 using Tech.Aquisitions.Customers.Workers.Consumers;
-using Tech.Aquisitions.Customers.Workers.HealthChecks;
 
 namespace Tech.Aquisitions.Customers.Workers
 {

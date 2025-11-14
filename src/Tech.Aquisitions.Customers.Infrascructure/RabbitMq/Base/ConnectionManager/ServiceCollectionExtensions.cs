@@ -1,7 +1,10 @@
-﻿using Tech.Aquisitions.Customers.Workers.Consumers.Base.Configuration;
-using Tech.Aquisitions.Customers.Workers.Consumers.Base.ConnectionManager.Interfaces;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.Configuration;
+using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.ConnectionManager.Interfaces;
 
-namespace Tech.Aquisitions.Customers.Workers.Consumers.Base.ConnectionManager;
+namespace Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.ConnectionManager;
 
 public static class ServiceCollectionExtensions
 {

@@ -1,10 +1,11 @@
-﻿using RabbitMQ.Client;
+﻿using Microsoft.Extensions.Logging;
+using RabbitMQ.Client;
 using System.Net.Security;
 using System.Security.Authentication;
-using Tech.Aquisitions.Customers.Workers.Consumers.Base.Configuration;
-using Tech.Aquisitions.Customers.Workers.Consumers.Base.ConnectionManager.Interfaces;
+using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.Configuration;
+using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.ConnectionManager.Interfaces;
 
-namespace Tech.Aquisitions.Customers.Workers.Consumers.Base.ConnectionManager;
+namespace Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.ConnectionManager;
 
 public sealed class RabbitMqConnectionManager : IRabbitMqConnectionManager
 {

@@ -1,5 +1,5 @@
-﻿using Tech.Aquisitions.Customers.Workers.Consumers.Base.ConsumerHandler;
-using Tech.Aquisitions.Customers.Workers.Consumers.Base.Events;
+﻿using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.ConsumerHandler;
+using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.Events;
 
 namespace Tech.Aquisitions.Customers.Workers.Consumers;
 

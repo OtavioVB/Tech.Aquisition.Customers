@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Tech.Aquisitions.Customers.Workers.Consumers.Base.Events;
+namespace Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.Events;
 
 public class EventBase<T> : IEvent<T>
 {
@@ -20,7 +20,7 @@ public class EventBase<T> : IEvent<T>
         Origin = origin;
     }
 
-    public Guid EventId { get; set;  }
+    public Guid EventId { get; set; }
 
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
