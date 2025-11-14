@@ -1,20 +1,10 @@
-﻿using Tech.Aquisitions.Customers.Domain.BoundedContexts.AquisitionCustomerRequestContext.Enums;
+﻿using Tech.Aquisitions.Customers.Domain.ValueObjects;
 
 namespace Tech.Aquisitions.Customers.Domain.BoundedContexts.AquisitionCustomerRequestContext.Entities;
 
 public sealed record AquisitionCustomerRequest
 {
-    public AquisitionCustomerRequest(
-        string firstName, 
-        string lastName, 
-        string email,
-        string phone,
-        DateTime createdAt, 
-        Guid createdCorrelationId, 
-        AquisitionCustomerRequestStatus status,
-        AquisitionCustomerRequestedOrigin origin,
-        DateTime lastModifiedAt, 
-        Guid lastModifiedCorrelationId)
+    public AquisitionCustomerRequest(FirstNameValueObject firstName, LastNameValueObject lastName, EmailValueObject email, PhoneValueObject phone, DateTimeValueObject createdAt, IdValueObject createdCorrelationId, RequestStatusValueObject status, RequestOriginValueObject origin, DateTimeValueObject lastModifiedAt, IdValueObject lastModifiedCorrelationId)
     {
         FirstName = firstName;
         LastName = lastName;
@@ -28,14 +18,14 @@ public sealed record AquisitionCustomerRequest
         LastModifiedCorrelationId = lastModifiedCorrelationId;
     }
 
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Email { get; set; }
-    public string Phone { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public Guid CreatedCorrelationId { get; set; }
-    public AquisitionCustomerRequestStatus Status { get; set; }
-    public AquisitionCustomerRequestedOrigin Origin { get; set; }
-    public DateTime LastModifiedAt { get; set; }
-    public Guid LastModifiedCorrelationId { get; set; }
+    public FirstNameValueObject FirstName { get; set; }
+    public LastNameValueObject LastName { get; set; }
+    public EmailValueObject Email { get; set; }
+    public PhoneValueObject Phone { get; set; }
+    public DateTimeValueObject CreatedAt { get; set; }
+    public IdValueObject CreatedCorrelationId { get; set; }
+    public RequestStatusValueObject Status { get; set; }
+    public RequestOriginValueObject Origin { get; set; }
+    public DateTimeValueObject LastModifiedAt { get; set; }
+    public IdValueObject LastModifiedCorrelationId { get; set; }
 }
