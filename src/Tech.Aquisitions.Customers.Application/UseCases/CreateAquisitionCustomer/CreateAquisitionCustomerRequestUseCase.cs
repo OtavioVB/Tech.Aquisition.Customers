@@ -1,20 +1,25 @@
 ﻿using Microsoft.Extensions.Logging;
 using Tech.Aquisitions.Customers.Application.UseCases.Base;
-using Tech.Aquisitions.Customers.Application.UseCases.Base.Interfaces;
 using Tech.Aquisitions.Customers.Application.UseCases.CreateAquisitionCustomer.Inputs;
 using Tech.Aquisitions.Customers.Domain.CrossCutting.MethodResultContext;
 using Tech.Aquisitions.Customers.Domain.CrossCutting.NotificationContext;
 using Tech.Aquisitions.Customers.Infrascructure.FeatureManager.Interfaces;
+using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.Publisher.Interfaces;
+using Tech.Aquisitions.Customers.Workers.Consumers;
 
 namespace Tech.Aquisitions.Customers.Application.UseCases.CreateAquisitionCustomer;
 
 public sealed class CreateAquisitionCustomerRequestUseCase : FeaturedUseCase<CreateAquisitionCustomerRequestUseCaseInput>
 {
+    private readonly IRabbitMqPublisher _publisher;
+
     public CreateAquisitionCustomerRequestUseCase(
+        IRabbitMqPublisher publisher,
         ILogger<FeaturedUseCase<CreateAquisitionCustomerRequestUseCaseInput>> logger, 
         IFeatureManagement featureManagement) 
         : base(logger, featureManagement)
     {
+        _publisher = publisher;
     }
 
     protected override string FeatureName => nameof(CreateAquisitionCustomerRequestUseCase);
@@ -30,6 +35,12 @@ public sealed class CreateAquisitionCustomerRequestUseCase : FeaturedUseCase<Cre
 
             if (!inputValidationResult.IsValid)
                 return inputValidationResult;
+
+            await _publisher.PublishAsync<AquisitionCustomerRequestedEvent>(
+                @event: default,
+                exchangeName: string.Empty,
+                routingKey: string.Empty,
+                cancellationToken: cancellationToken);
 
             return default;
         }

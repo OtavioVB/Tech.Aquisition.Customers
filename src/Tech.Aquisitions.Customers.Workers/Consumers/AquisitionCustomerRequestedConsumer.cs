@@ -21,7 +21,8 @@ public sealed class AquisitionCustomerRequestedConsumer : ConsumerHandlerBase<Aq
             nameof(AquisitionCustomerRequestedConsumer),
             new 
             {
-                @event.EventId
+                @event.EventId,
+                @event.Timestamp
             });
 
         return Task.CompletedTask;

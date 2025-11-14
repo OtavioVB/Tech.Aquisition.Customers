@@ -8,7 +8,7 @@ namespace Tech.Aquisitions.Customers.Application.UseCases;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddUseCases(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddUseCasesConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IUseCase<CreateAquisitionCustomerRequestUseCaseInput>, CreateAquisitionCustomerRequestUseCase>();
 
