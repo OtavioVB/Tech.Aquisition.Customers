@@ -1,26 +1,28 @@
 ﻿using Microsoft.Extensions.Logging;
+using Tech.Aquisitions.Customers.Application.UseCases.Base;
 using Tech.Aquisitions.Customers.Application.UseCases.Base.Interfaces;
 using Tech.Aquisitions.Customers.Application.UseCases.CreateAquisitionCustomer.Inputs;
 using Tech.Aquisitions.Customers.Domain.CrossCutting.MethodResultContext;
 using Tech.Aquisitions.Customers.Domain.CrossCutting.NotificationContext;
+using Tech.Aquisitions.Customers.Infrascructure.FeatureManager.Interfaces;
 
 namespace Tech.Aquisitions.Customers.Application.UseCases.CreateAquisitionCustomer;
 
-public sealed class CreateAquisitionCustomerRequestUseCase : IUseCase<CreateAquisitionCustomerRequestUseCaseInput>
+public sealed class CreateAquisitionCustomerRequestUseCase : FeaturedUseCase<CreateAquisitionCustomerRequestUseCaseInput>
 {
-    private readonly ILogger<CreateAquisitionCustomerRequestUseCase> _logger;
-
-    public CreateAquisitionCustomerRequestUseCase(ILogger<CreateAquisitionCustomerRequestUseCase> logger)
+    public CreateAquisitionCustomerRequestUseCase(
+        ILogger<FeaturedUseCase<CreateAquisitionCustomerRequestUseCaseInput>> logger, 
+        IFeatureManagement featureManagement) 
+        : base(logger, featureManagement)
     {
-        _logger = logger;
     }
+
+    protected override string FeatureName => nameof(CreateAquisitionCustomerRequestUseCase);
 
     private const string CREATE_AQUISITION_CUSTOMER_REQUEST_ERROR_NOTIFICATION_CODE = "CREATE_AQUISITION_CUSTOMER_REQUEST_ERROR";
     private const string CREATE_AQUISITION_CUSTOMER_REQUEST_ERROR_NOTIFICATION_MESSAGE = "Não foi possível solicitar a criação do cadastro de cliente.";
 
-    public async Task<MethodResult> ExecuteAsync(
-        CreateAquisitionCustomerRequestUseCaseInput input, 
-        CancellationToken cancellationToken = default)
+    protected override async Task<MethodResult> HandleAsync(CreateAquisitionCustomerRequestUseCaseInput input, CancellationToken cancellationToken = default)
     {
         try
         {

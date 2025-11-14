@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Tech.Aquisitions.Customers.Infrascructure.FeatureManager;
+using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.ConnectionManager;
 using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.HealthChecks;
 using Tech.Aquisitions.Customers.Workers.Consumers;
 
@@ -18,7 +20,12 @@ namespace Tech.Aquisitions.Customers.Workers
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddAquisitionCustomerRequestedConsumerConfiguration(context.Configuration);
+                    services
+                        .AddRabbitMqConnectionManagerConfiguration(context.Configuration)
+                        .AddFeatureManagementConfiguration(context.Configuration);
+
+                    services
+                        .AddAquisitionCustomerRequestedConsumerConfiguration(context.Configuration);
 
                     services
                         .AddHealthChecks()
@@ -26,6 +33,7 @@ namespace Tech.Aquisitions.Customers.Workers
                             name: nameof(RabbitMqHealthCheck),
                             failureStatus: HealthStatus.Unhealthy,
                             tags: ["ready", "rabbitmq"]);
+
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
