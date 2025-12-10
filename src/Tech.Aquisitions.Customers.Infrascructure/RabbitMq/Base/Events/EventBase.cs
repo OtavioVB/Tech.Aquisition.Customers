@@ -22,7 +22,6 @@ public class EventBase<T> : IEvent<T>
 
     public Guid EventId { get; set; }
 
-
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Origin { get; set; }
 

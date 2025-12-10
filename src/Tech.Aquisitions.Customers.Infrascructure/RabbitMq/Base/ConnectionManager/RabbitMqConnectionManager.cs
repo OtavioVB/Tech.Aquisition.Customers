@@ -20,7 +20,6 @@ public sealed class RabbitMqConnectionManager : IRabbitMqConnectionManager
 
     private IConnection? _connection;
 
-
     private readonly SemaphoreSlim _connectionLock = new SemaphoreSlim(_connectionMaxAccessLockCount);
     private const int _connectionMaxAccessLockCount = 1;
 

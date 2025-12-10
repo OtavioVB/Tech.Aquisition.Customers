@@ -77,4 +77,7 @@ public readonly struct EmailValueObject
             email: normalized,
             methodResult: MethodResult.Success());
     }
+
+    public static implicit operator EmailValueObject(string obj)
+        => Build(obj);
 }

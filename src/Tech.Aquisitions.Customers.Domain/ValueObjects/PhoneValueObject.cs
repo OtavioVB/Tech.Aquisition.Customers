@@ -103,4 +103,7 @@ public readonly struct PhoneValueObject
         }
         return true;
     }
+
+    public static implicit operator PhoneValueObject(string obj)
+        => Build(obj);
 }

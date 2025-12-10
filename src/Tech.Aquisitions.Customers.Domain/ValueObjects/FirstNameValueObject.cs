@@ -64,4 +64,7 @@ public readonly struct FirstNameValueObject
             firstName: formatted,
             methodResult: MethodResult.Success());
     }
+
+    public static implicit operator FirstNameValueObject(string obj)
+        => Build(obj);
 }
