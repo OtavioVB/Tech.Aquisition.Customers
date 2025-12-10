@@ -23,6 +23,11 @@
       "name": "tech.aquitions.customers.requested",
       "vhost": "/aquisitions-customers",
       "durable": true
+    },
+    {
+      "name": "tech.aquitions.customers.requested-dlq",
+      "vhost": "/aquisitions-customers",
+      "durable": true
     }
   ],
   "exchanges": [
@@ -44,6 +49,13 @@
       "source": "tech-aquisition-customers",
       "vhost": "/aquisitions-customers",
       "destination": "tech.aquitions.customers.requested",
+      "destination_type": "queue",
+      "routing_key": "tech.aquitions.customers.request"
+    },
+    {
+      "source": "tech-aquisition-customers.dead",
+      "vhost": "/aquisitions-customers",
+      "destination": "tech.aquitions.customers.requested-dlq",
       "destination_type": "queue",
       "routing_key": "tech.aquitions.customers.request"
     }
