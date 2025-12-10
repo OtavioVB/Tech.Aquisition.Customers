@@ -52,12 +52,16 @@ public abstract class ConsumerHandlerBase<TEvent> : BackgroundService
             }
             catch (Exception ex)
             {
+                var connectionDlq = await _connectionManager.GetResilientAlwaysOpennedConnectionAsync(stoppingToken);
+
+                using var channelDlq = await connectionDlq.CreateChannelAsync(cancellationToken: stoppingToken);
+
                 var headers = @event.BasicProperties.Headers;
 
                 headers!.Add("X-Stack-Trace", ex.StackTrace);
                 headers.Add("X-Error-Message", ex.Message);
 
-                await channel.BasicPublishAsync(
+                await channelDlq.BasicPublishAsync(
                     exchange: $"{@event.Exchange}.dead",
                     routingKey: @event.RoutingKey,
                     body: @event.Body.ToArray(),

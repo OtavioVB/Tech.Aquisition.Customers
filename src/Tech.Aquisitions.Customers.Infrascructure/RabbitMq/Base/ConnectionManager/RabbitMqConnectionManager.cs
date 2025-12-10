@@ -25,7 +25,7 @@ public sealed class RabbitMqConnectionManager : IRabbitMqConnectionManager
 
     public async Task<IConnection> TryConnectAsync(CancellationToken cancellationToken = default)
     {
-        if (_connection != null)
+        if (_connection != null && _connection.IsOpen)
             return _connection;
 
         await _connectionLock.WaitAsync(cancellationToken);
@@ -59,6 +59,9 @@ public sealed class RabbitMqConnectionManager : IRabbitMqConnectionManager
                     _configuration.ClientProviderName,
                     _configuration.RetryConnectionDelayInMs,
                 });
+
+            _connection?.Dispose();
+            _connection = null;
 
             _connection = await connectionFactory.CreateConnectionAsync(cancellationToken);
 
