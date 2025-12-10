@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System.Reflection.PortableExecutable;
 using System.Text.Json;
 using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.ConnectionManager.Interfaces;
 using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.Events;
@@ -30,7 +31,7 @@ public abstract class ConsumerHandlerBase<TEvent> : BackgroundService
     {
         var connection = await _connectionManager.GetResilientAlwaysOpennedConnectionAsync(stoppingToken);
 
-        using var channel = await connection.CreateChannelAsync(cancellationToken: stoppingToken);
+        var channel = await connection.CreateChannelAsync(cancellationToken: stoppingToken);
 
         var consumer = new AsyncEventingBasicConsumer(channel);
 
@@ -40,12 +41,43 @@ public abstract class ConsumerHandlerBase<TEvent> : BackgroundService
 
             var raw = @event.Body.ToArray();
 
-            var input = JsonSerializer.Deserialize<IEvent<TEvent>>(raw, new JsonSerializerOptions()
+            try
             {
-                PropertyNameCaseInsensitive = true
-            })!;
+                var input = JsonSerializer.Deserialize<IEvent<TEvent>>(raw, new JsonSerializerOptions()
+                {
+                    PropertyNameCaseInsensitive = true
+                })!;
 
-            await OnEventReceived(input, scope.ServiceProvider, stoppingToken);
+                await OnEventReceived(input, scope.ServiceProvider, stoppingToken);
+            }
+            catch (Exception ex)
+            {
+                var headers = @event.BasicProperties.Headers;
+
+                headers!.Add("X-Stack-Trace", ex.StackTrace);
+                headers.Add("X-Error-Message", ex.Message);
+
+                await channel.BasicPublishAsync(
+                    exchange: $"{@event.Exchange}.dead",
+                    routingKey: @event.RoutingKey,
+                    body: @event.Body.ToArray(),
+                    mandatory: false,
+                    basicProperties: new BasicProperties()
+                    {
+                        Headers = headers
+                    },
+                    cancellationToken: stoppingToken);
+
+                _logger.LogError(
+                    exception: ex,
+                    message: "[{Type}] Got an exception handling event receveiment. Input = {@Input}",
+                    nameof(ConsumerHandlerBase<TEvent>),
+                    new
+                    {
+                        @event.Exchange,
+                        @event.RoutingKey
+                    });
+            }
         };
 
         var consumerTag = $"{QueueName}-{Guid.NewGuid().ToString()}-consumers";

@@ -25,6 +25,8 @@ public sealed class AquisitionCustomerRequestedConsumer : ConsumerHandlerBase<Aq
                 @event.Timestamp
             });
 
+        throw new Exception("test");
+
         return Task.CompletedTask;
     }
 }
