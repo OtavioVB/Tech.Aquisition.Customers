@@ -24,8 +24,46 @@ public abstract class ConsumerHandlerBase<TEvent> : BackgroundService
     }
 
     protected abstract string QueueName { get; }
-
     protected virtual bool AutoAck => false;
+    protected virtual bool EnableDlq => false;
+
+    protected virtual async Task ProduceDlqAsync(Exception ex, BasicDeliverEventArgs @event, CancellationToken cancellationToken)
+    {
+        var connectionDlq = await _connectionManager.GetResilientAlwaysOpennedConnectionAsync(cancellationToken);
+
+        await using var channelDlq = await connectionDlq.CreateChannelAsync(cancellationToken: cancellationToken);
+
+        var headers = @event.BasicProperties.Headers;
+
+        headers?.Add("X-Stack-Trace", ex.StackTrace);
+        headers?.Add("X-Error-Message", ex.Message);
+        headers?.Add("X-Publish-Error-Timestamp", DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"));
+
+        await channelDlq.BasicPublishAsync(
+            exchange: $"{@event.Exchange}.dead",
+            routingKey: @event.RoutingKey,
+            body: @event.Body.ToArray(),
+            mandatory: false,
+            basicProperties: new BasicProperties()
+            {
+                Headers = headers
+            },
+            cancellationToken: cancellationToken);
+
+        var eventId = @event.BasicProperties.Headers?["X-Event-Id"]?.ToString();
+
+        _logger.LogError(
+            exception: ex,
+            message: "[{Type}] The event has been published to DLQ queue, because, has got an exception handling event receveiment. Input = {@Input}",
+            nameof(ConsumerHandlerBase<TEvent>),
+            new
+            {
+                EventId = eventId,
+                @event.DeliveryTag,
+                @event.Exchange,
+                @event.RoutingKey
+            });
+    }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -43,7 +81,7 @@ public abstract class ConsumerHandlerBase<TEvent> : BackgroundService
 
             try
             {
-                var input = JsonSerializer.Deserialize<IEvent<TEvent>>(raw, new JsonSerializerOptions()
+                var input = JsonSerializer.Deserialize<EventBase<TEvent>>(raw, new JsonSerializerOptions()
                 {
                     PropertyNameCaseInsensitive = true
                 })!;
@@ -52,35 +90,31 @@ public abstract class ConsumerHandlerBase<TEvent> : BackgroundService
             }
             catch (Exception ex)
             {
-                var connectionDlq = await _connectionManager.GetResilientAlwaysOpennedConnectionAsync(stoppingToken);
+                if (EnableDlq)
+                {
+                    await ProduceDlqAsync(ex, @event, stoppingToken);
+                }
+                else
+                {
+                    var eventId = @event.BasicProperties.Headers?["X-Event-Id"]?.ToString();
 
-                using var channelDlq = await connectionDlq.CreateChannelAsync(cancellationToken: stoppingToken);
-
-                var headers = @event.BasicProperties.Headers;
-
-                headers!.Add("X-Stack-Trace", ex.StackTrace);
-                headers.Add("X-Error-Message", ex.Message);
-
-                await channelDlq.BasicPublishAsync(
-                    exchange: $"{@event.Exchange}.dead",
-                    routingKey: @event.RoutingKey,
-                    body: @event.Body.ToArray(),
-                    mandatory: false,
-                    basicProperties: new BasicProperties()
-                    {
-                        Headers = headers
-                    },
-                    cancellationToken: stoppingToken);
-
-                _logger.LogError(
-                    exception: ex,
-                    message: "[{Type}] Got an exception handling event receveiment. Input = {@Input}",
-                    nameof(ConsumerHandlerBase<TEvent>),
-                    new
-                    {
-                        @event.Exchange,
-                        @event.RoutingKey
-                    });
+                    _logger.LogError("[{Type}] Got an exception handling event. The message will be discarted because the consumer doesn't have resilience policy activated. Input = {@Input}",
+                        nameof(ConsumerHandlerBase<TEvent>),
+                        new
+                        {
+                            EventId = eventId,
+                            @event.DeliveryTag,
+                            @event.Exchange,
+                            @event.RoutingKey
+                        });
+                }
+            }
+            finally
+            {
+                if (AutoAck == false)
+                {
+                    await channel.BasicAckAsync(@event.DeliveryTag, multiple: false, stoppingToken);
+                }
             }
         };
 

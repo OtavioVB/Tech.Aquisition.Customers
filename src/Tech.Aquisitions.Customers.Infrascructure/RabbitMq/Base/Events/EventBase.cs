@@ -1,9 +1,11 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.Events;
+﻿namespace Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.Events;
 
 public class EventBase<T> : IEvent<T>
 {
+    public EventBase()
+    {
+    }
+
     public EventBase(T @event)
     {
         EventId = Guid.NewGuid();
@@ -21,11 +23,7 @@ public class EventBase<T> : IEvent<T>
     }
 
     public Guid EventId { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Origin { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? RoutingKey { get; set; }
 
     public T Event { get; set; }
