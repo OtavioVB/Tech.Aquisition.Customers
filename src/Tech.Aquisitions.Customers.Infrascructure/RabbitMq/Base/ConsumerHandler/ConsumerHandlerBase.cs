@@ -35,13 +35,18 @@ public abstract class ConsumerHandlerBase<TEvent> : BackgroundService
 
         var headers = @event.BasicProperties.Headers;
 
-        headers?.Add("X-Stack-Trace", ex.StackTrace);
-        headers?.Add("X-Error-Message", ex.Message);
-        headers?.Add("X-Publish-Error-Timestamp", DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"));
+        var exchangeDead = $"{@event.Exchange}.dead";
+        var routingKey = @event.RoutingKey;
+
+        headers?.Add(EventTag.StackTrace, ex.StackTrace);
+        headers?.Add(EventTag.ErrorMessage, ex.Message);
+        headers?.Add(EventTag.DlqPublishedTimestamp, DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"));
+        headers?.Add(EventTag.DeadExchange, exchangeDead);
+        headers?.Add(EventTag.DeadRoutingKey, routingKey);
 
         await channelDlq.BasicPublishAsync(
-            exchange: $"{@event.Exchange}.dead",
-            routingKey: @event.RoutingKey,
+            exchange: exchangeDead,
+            routingKey: routingKey,
             body: @event.Body.ToArray(),
             mandatory: false,
             basicProperties: new BasicProperties()
@@ -50,7 +55,7 @@ public abstract class ConsumerHandlerBase<TEvent> : BackgroundService
             },
             cancellationToken: cancellationToken);
 
-        var eventId = @event.BasicProperties.Headers?["X-Event-Id"]?.ToString();
+        var eventId = @event.BasicProperties.Headers?[EventTag.Id]?.ToString();
 
         _logger.LogError(
             exception: ex,
@@ -61,7 +66,9 @@ public abstract class ConsumerHandlerBase<TEvent> : BackgroundService
                 EventId = eventId,
                 @event.DeliveryTag,
                 @event.Exchange,
-                @event.RoutingKey
+                @event.RoutingKey,
+                DeadExchange = exchangeDead,
+                DeadRoutingKey = routingKey
             });
     }
 

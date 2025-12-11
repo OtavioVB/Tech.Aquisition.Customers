@@ -51,9 +51,11 @@ public class RabbitMqPublisher : IRabbitMqPublisher
 
         var headers = new Dictionary<string, object?>()
         {
-            { "X-Event-Id", @event.EventId.ToString() },
-            { "X-Timestamp", @event.Timestamp.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ") },
-            { "X-Origin-Service", Namespace.Name }
+            { EventTag.Id, @event.EventId.ToString() },
+            { EventTag.Timestamp, @event.Timestamp.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ") },
+            { EventTag.Origin, Namespace.Name },
+            { EventTag.RoutingKey, routingKey },
+            { EventTag.Exchange, exchangeName }
         };
 
         await channel.BasicPublishAsync(
