@@ -6,6 +6,7 @@ using Tech.Aquisitions.Customers.Infrascructure.FeatureManager;
 using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.ConnectionManager;
 using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.HealthChecks;
 using Tech.Aquisitions.Customers.Workers.Consumers;
+using Tech.Aquisitions.Customers.Workers.Hubs;
 
 namespace Tech.Aquisitions.Customers.Workers
 {
@@ -28,6 +29,9 @@ namespace Tech.Aquisitions.Customers.Workers
                         .AddAquisitionCustomerRequestedConsumerConfiguration(context.Configuration);
 
                     services
+                        .AddSignalR();
+
+                    services
                         .AddHealthChecks()
                         .AddCheck<RabbitMqHealthCheck>(
                             name: nameof(RabbitMqHealthCheck),
@@ -40,6 +44,11 @@ namespace Tech.Aquisitions.Customers.Workers
                     webBuilder.UseKestrel(options =>
                     {
                         options.ListenAnyIP(8080);
+
+                        options.ListenAnyIP(8081, listenOptions =>
+                        {
+                            listenOptions.UseHttps();
+                        });
                     });
 
                     webBuilder.Configure(app =>
@@ -47,6 +56,8 @@ namespace Tech.Aquisitions.Customers.Workers
                         app.UseRouting();
                         app.UseEndpoints(endpoints =>
                         {
+                            endpoints.MapHubsConfiguration();
+
                             endpoints.MapHealthChecks("/health/ready", new HealthCheckOptions
                             {
                                 Predicate = r => r.Tags.Contains("ready")

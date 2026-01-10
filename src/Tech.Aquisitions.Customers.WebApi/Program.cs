@@ -1,10 +1,7 @@
-
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Tech.Aquisitions.Customers.Application.UseCases;
 using Tech.Aquisitions.Customers.Infrascructure.FeatureManager;
 using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.ConnectionManager;
 using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.Publisher;
-using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.HealthChecks;
 
 namespace Tech.Aquisitions.Customers.WebApi;
 
@@ -14,7 +11,8 @@ public sealed class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddControllers();
+        builder.Services
+            .AddControllers();
 
         builder.Services
             .AddRabbitMqConnectionManagerConfiguration(builder.Configuration)
