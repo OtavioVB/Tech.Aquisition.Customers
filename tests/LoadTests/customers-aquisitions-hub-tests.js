@@ -1,40 +1,113 @@
-import ws from 'k6/ws';
-import { check, sleep } from 'k6';
+import http from "k6/http";
+import ws from "k6/ws";
+import { check, sleep } from "k6";
+import { Trend, Rate } from "k6/metrics";
 
-const RECORD_SEPARATOR = '\u001e';
+const handshakeTrend = new Trend("signalr_handshake_ms");
+const connectFailRate = new Rate("signalr_connect_fail");
+const negotiateFailRate = new Rate("signalr_negotiate_fail");
 
 export const options = {
-  vus: 50,
-  duration: '30s',
+  scenarios: {
+    connect_and_hold: {
+        executor: "per-vu-iterations",
+        vus: 50,
+        maxDuration: "40s",
+        iterations: 1,
+    },
+  },
+  thresholds: {
+    signalr_connect_fail: ["rate<0.01"],
+    signalr_negotiate_fail: ["rate<0.01"],
+  },
 };
 
-export default function () {
-  const url = 'wss://localhost:8081/hubs/aquisitions/customers';
+const BASE_URL = "wss://localhost:8081";
+const HUB_PATH = "/hubs/aquisitions/customers";
+const TOKEN = "6962dad3-7404-8325-a0d0-d5c8a8079ae8";
 
-  const res = ws.connect(url, {}, function (socket) {
-    socket.on('open', () => {
-      socket.send(JSON.stringify({ protocol: 'json', version: 1 }) + RECORD_SEPARATOR);
-      sleep(10);
-      socket.close();
+function negotiate() {
+  const url = `https://localhost:8081${HUB_PATH}/negotiate?negotiateVersion=1`;
+
+  const headers = {
+    "Content-Type": "application/json",
+    "Authorization": `${TOKEN}`
+  };
+
+  const res = http.post(url, null, { headers });
+
+  const ok = check(res, {
+    "[CreateCustomerAquisitionRequestedNotification][Negotiate] Status 200": (r) => r.status === 200,
+  });
+
+  if (!ok) {
+    negotiateFailRate.add(1);
+    return null;
+  }
+  negotiateFailRate.add(0);
+
+  return res.json();
+}
+
+function buildWsUrl(neg) {
+  const wsBase = `${BASE_URL}${HUB_PATH}`;
+  return `${wsBase}?id=${encodeURIComponent(neg.connectionToken)}`;
+}
+
+export default function () {
+  const neg = negotiate();
+  if (!neg) {
+    sleep(1);
+    return;
+  }
+
+  const wsUrl = buildWsUrl(neg);
+
+  const params = {
+    headers: {
+      "Authorization": `${TOKEN}`
+    },
+  };
+
+  const start = Date.now();
+
+  const res = ws.connect(wsUrl, params, (socket) => {
+    let handshaked = false;
+
+    socket.on("open", () => {
+      socket.send('{"protocol":"json","version":1}\x1e');
     });
 
-    socket.on('message', (raw) => {
-      const frames = raw.split(RECORD_SEPARATOR).filter(Boolean);
-
-      for (const f of frames) {
-        let msg;
-        try { msg = JSON.parse(f); } catch { continue; }
-
-        if (msg.type === 1 && msg.target === 'CreateCustomerAquisitionRequestedNotification') {
-            console.log("recebido conforme esperado.");
-        }
+    socket.on("message", (data) => {
+      if (!handshaked) {
+        handshaked = true;
+        handshakeTrend.add(Date.now() - start);
       }
     });
 
-    socket.on('error', (e) => {
-      console.log('ws error', e);
+    socket.on("error", (e) => {
+      connectFailRate.add(1);
     });
+
+    socket.on("close", (code, reason) => {
+        const normal = code === 1000 || code === 1001;
+
+        if (!normal) {
+            connectFailRate.add(1);
+        }
+    });
+
+    socket.setTimeout(() => {
+      socket.close();
+    }, 40 * 1000);
   });
 
-  check(res, { 'upgraded to websocket': (r) => r && r.status === 101 });
+  const ok = check(res, {
+    "ws connected (status 101)": (r) => r && r.status === 101,
+  });
+
+  if (!ok) connectFailRate.add(1);
+  else connectFailRate.add(0);
+
+  sleep(1);
 }

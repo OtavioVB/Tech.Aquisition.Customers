@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11312.210 d18.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B459C7BC-346F-4034-8536-29E10CB38644}"
 EndProject
@@ -41,6 +41,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tech.Aquisitions.Customers.Infrascructure", "src\Tech.Aquisitions.Customers.Infrascructure\Tech.Aquisitions.Customers.Infrascructure.csproj", "{B4D934B6-C207-4C19-A2E0-98405A2DDA5A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tsts", "tsts", "{8B61A1E0-E466-4919-B151-3AF487E2A790}"
+	ProjectSection(SolutionItems) = preProject
+		tests\LoadTests\customers-aquisitions-hub-tests.js = tests\LoadTests\customers-aquisitions-hub-tests.js
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
