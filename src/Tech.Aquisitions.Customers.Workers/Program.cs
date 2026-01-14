@@ -44,11 +44,6 @@ namespace Tech.Aquisitions.Customers.Workers
                     webBuilder.UseKestrel(options =>
                     {
                         options.ListenAnyIP(8080);
-
-                        options.ListenAnyIP(8081, listenOptions =>
-                        {
-                            listenOptions.UseHttps();
-                        });
                     });
 
                     webBuilder.Configure(app =>

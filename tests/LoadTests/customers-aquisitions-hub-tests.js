@@ -7,13 +7,29 @@ const handshakeTrend = new Trend("signalr_handshake_ms");
 const connectFailRate = new Rate("signalr_connect_fail");
 const negotiateFailRate = new Rate("signalr_negotiate_fail");
 
+const HOLD_MS = 180 * 1000;
+
 export const options = {
   scenarios: {
-    connect_and_hold: {
-        executor: "per-vu-iterations",
-        vus: 50,
-        maxDuration: "40s",
-        iterations: 1,
+    capacity_ws: {
+        executor: "ramping-vus",
+        startVUs: 0,
+        stages: [
+            { duration: "15s", target: 840 },
+            { duration: "30s", target: 840 },
+
+            { duration: "15s", target: 860 },
+            { duration: "30s", target: 860 },
+
+            { duration: "15s", target: 880 },
+            { duration: "30s", target: 880 },
+
+            { duration: "15s", target: 900 },
+            { duration: "30s", target: 900 },
+
+            { duration: "30s", target: 0 },
+        ],
+        gracefulRampDown: "30s",
     },
   },
   thresholds: {
@@ -22,12 +38,12 @@ export const options = {
   },
 };
 
-const BASE_URL = "wss://localhost:8081";
+const BASE_URL = "ws://localhost:8080";
 const HUB_PATH = "/hubs/aquisitions/customers";
 const TOKEN = "6962dad3-7404-8325-a0d0-d5c8a8079ae8";
 
 function negotiate() {
-  const url = `https://localhost:8081${HUB_PATH}/negotiate?negotiateVersion=1`;
+  const url = `http://localhost:8080${HUB_PATH}/negotiate?negotiateVersion=1`;
 
   const headers = {
     "Content-Type": "application/json",
@@ -55,6 +71,8 @@ function buildWsUrl(neg) {
 }
 
 export default function () {
+    if (__ITER > 0) { sleep(1); return; }
+
   const neg = negotiate();
   if (!neg) {
     sleep(1);
@@ -99,7 +117,7 @@ export default function () {
 
     socket.setTimeout(() => {
       socket.close();
-    }, 40 * 1000);
+    }, HOLD_MS);
   });
 
   const ok = check(res, {

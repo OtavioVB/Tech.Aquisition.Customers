@@ -14,8 +14,26 @@ services:
             - "./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json"
             - "./rabbitmq/ssl:/etc/rabbitmq/ssl"
             - tech-aquisitions-customers-rabbitmq-volume:/var/lib/rabbitmq
+        mem_limit: 1024m
+        cpus: 1.0
         networks:
             - tech-aquisitions-customers-network-local
+    tech-aquisitions-customers-workers-service:
+      build:
+        context: ./..
+        dockerfile: Workers.Dockerfile
+      image: tech-aquisitions-customers-workers-service:local  
+      restart: unless-stopped
+      ports:
+        - "8080:8080"
+      environment:
+        - ASPNETCORE_URLS=http://+:8080
+      mem_limit: 80m
+      cpus: 1.0
+      depends_on:
+        - tech-aquisitions-customers-rabbitmq-local
+      networks:
+        - tech-aquisitions-customers-network-local
 
 networks:
   tech-aquisitions-customers-network-local:
