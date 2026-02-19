@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.3.11312.210 d18.3
+VisualStudioVersion = 18.3.11312.210
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B459C7BC-346F-4034-8536-29E10CB38644}"
 EndProject
@@ -15,6 +15,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "devops", "devops", "{68600D43-097C-43DD-A2E0-AC88D950FFC7}"
 	ProjectSection(SolutionItems) = preProject
 		devops\docker-compose.local.yaml = devops\docker-compose.local.yaml
+		Workers.Dockerfile = Workers.Dockerfile
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "rabbitmq", "rabbitmq", "{E495A36F-B32B-4701-9736-E02B07070E41}"
