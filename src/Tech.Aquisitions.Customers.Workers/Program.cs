@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using StackExchange.Redis;
+using System.Net;
 using Tech.Aquisitions.Customers.Infrascructure.FeatureManager;
 using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.ConnectionManager;
 using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.HealthChecks;
@@ -32,17 +33,9 @@ namespace Tech.Aquisitions.Customers.Workers
 
                     services
                         .AddSignalR()
-                        .AddStackExchangeRedis(options =>
+                        .AddStackExchangeRedis(context.Configuration.GetConnectionString("Redis")!, options =>
                         {
-                            options.ConnectionFactory = async writer =>
-                            {
-                                var config = new ConfigurationOptions()
-                                {
-                                     EndPoints = []
-                                };
-                                var connection = await ConnectionMultiplexer.ConnectAsync(config, writer);
-                            };
-                            options.Configuration.ChannelPrefix = new RedisChannel(Environment.GetEnvironmentVariable("NAMESPACE")!, PatternMode.Auto);
+                            options.Configuration.ChannelPrefix = new RedisChannel(Environment.GetEnvironmentVariable("NAMESPACE")!, PatternMode.Auto)
                         });
 
                     services
