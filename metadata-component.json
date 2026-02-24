@@ -1,0 +1,22 @@
+{
+  "services": [
+    {
+      "name": "Worker de Plataforma de Aquisição de Clientes",
+      "namespace": "tech-aquisitions-customers-worker",
+      "dependencies": [
+        {
+          "name": "rabbitmq",
+          "container_name": "tech-aquisitions-customers-rabbitmq",
+          "environment": [ "local" ],
+          "security": true
+        },
+        {
+          "name": "redis",
+          "container_name": "tech-aquisitions-customers-redis",
+          "environment": [ "local" ],
+          "security": false
+        }
+      ]
+    }
+  ]
+}

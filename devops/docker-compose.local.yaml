@@ -18,6 +18,20 @@ services:
         cpus: 1.0
         networks:
             - tech-aquisitions-customers-network-local
+    tech-aquisitions-customers-redis-local:
+        image: redis:7-alpine
+        container_name: tech-aquisitions-customers-redis-local
+        restart: unless-stopped
+        ports:
+            - "6379:6379"
+        volumes:
+            - tech-aquisitions-customers-redis-volume:/data
+        command: redis-server --appendonly yes
+        mem_limit: 256m
+        cpus: 0.5
+        networks:
+            - tech-aquisitions-customers-network-local
+            - tech-aquisitions-customers-redis-local
     tech-aquisitions-customers-workers-service:
       build:
         context: ./..
@@ -41,3 +55,4 @@ networks:
 
 volumes:
   tech-aquisitions-customers-rabbitmq-volume:
+  tech-aquisitions-customers-redis-volume:

@@ -35,7 +35,7 @@ namespace Tech.Aquisitions.Customers.Workers
                         .AddSignalR()
                         .AddStackExchangeRedis(context.Configuration.GetConnectionString("Redis")!, options =>
                         {
-                            options.Configuration.ChannelPrefix = new RedisChannel(Environment.GetEnvironmentVariable("NAMESPACE")!, PatternMode.Auto)
+                            options.Configuration.ChannelPrefix = new RedisChannel(Environment.GetEnvironmentVariable("NAMESPACE")!, PatternMode.Auto);
                         });
 
                     services
