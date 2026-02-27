@@ -17,7 +17,9 @@ public sealed class CustomerAquisitionHub : Hub
     {
         var groupName = CustomerAquisitionHubSpecifications.GetUserUniqueChannelGroup(Context.Items["Id"]!.ToString()!);
 
-        await Clients.Group(groupName).SendAsync("CreateCustomerAquisitionRequestedNotification", request);
+        await Clients.Group(groupName).SendAsync("CreateCustomerAquisitionRequestedNotification", request, Context.ConnectionAborted);
+
+        await Clients.All.SendAsync("CreateCustomerAquisitionRequestedNotification", request, Context.ConnectionAborted);
     }
 
     public async override Task OnConnectedAsync()

@@ -31,15 +31,32 @@ services:
         cpus: 0.5
         networks:
             - tech-aquisitions-customers-network-local
-            - tech-aquisitions-customers-redis-local
     tech-aquisitions-customers-workers-service:
       build:
         context: ./..
         dockerfile: Workers.Dockerfile
       image: tech-aquisitions-customers-workers-service:local  
+      container_name: tech-aquisitions-customers-workers-service-pod1
       restart: unless-stopped
       ports:
         - "8080:8080"
+      environment:
+        - ASPNETCORE_URLS=http://+:8080
+      mem_limit: 80m
+      cpus: 1.0
+      depends_on:
+        - tech-aquisitions-customers-rabbitmq-local
+      networks:
+        - tech-aquisitions-customers-network-local
+    tech-aquisitions-customers-workers-service-pod2:
+      build:
+        context: ./..
+        dockerfile: Workers.Dockerfile
+      image: tech-aquisitions-customers-workers-service:local  
+      container_name: tech-aquisitions-customers-workers-service-pod2
+      restart: unless-stopped
+      ports:
+        - "8081:8080"
       environment:
         - ASPNETCORE_URLS=http://+:8080
       mem_limit: 80m

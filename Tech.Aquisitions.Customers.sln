@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B459C7BC-346
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{EFAEF662-F508-4109-819F-B61741F1D3C9}"
 	ProjectSection(SolutionItems) = preProject
+		metadata-component.json = metadata-component.json
 		README.md = README.md
 	EndProjectSection
 EndProject

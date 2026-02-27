@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using StackExchange.Redis;
 using System.Net;
@@ -9,6 +10,7 @@ using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.Base.ConnectionManager;
 using Tech.Aquisitions.Customers.Infrascructure.RabbitMq.HealthChecks;
 using Tech.Aquisitions.Customers.Workers.Consumers;
 using Tech.Aquisitions.Customers.Workers.Hubs;
+using Tech.Aquisitions.Customers.Workers.Hubs.CustomerAquisitionContext;
 using static StackExchange.Redis.RedisChannel;
 
 namespace Tech.Aquisitions.Customers.Workers
